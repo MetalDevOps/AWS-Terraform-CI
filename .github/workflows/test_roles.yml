@@ -29,15 +29,15 @@ jobs:
       - name: get-caller-identity
         run: |
           mkdir -p ~/.aws
-          echo \[default\] > ~/.aws/credentials
-          echo aws_access_key_id = ${{ env.AWS_ACCESS_KEY_ID }} >> ~/.aws/credentials
-          echo aws_secret_access_key = ${{ env.AWS_SECRET_ACCESS_KEY }} >> ~/.aws/credentials
-          aws s3 sync s3://kyoninja-bucket/terraform.tfstate .
-          ls -la
+          aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region us-east-1
           aws --version
           aws sts get-caller-identity
           aws configure list
           aws configure list-profiles
+          aws s3 sync s3://kyoninja-bucket/terraform.tfstate .
+          ls -la
       # 2nd
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@master
