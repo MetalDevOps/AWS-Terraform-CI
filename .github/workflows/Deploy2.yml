@@ -20,16 +20,11 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
     permissions:
       id-token: write
       contents: write
       pull-requests: write
-
-    defaults:
-        run:
-          shell: bash
 
     steps:
     - name: Checkout
