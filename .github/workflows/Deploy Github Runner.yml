@@ -53,6 +53,7 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         echo $SSH_CONFIG > ~/.ssh/config
         chmod 600 ~/.ssh/config
+        chmod 600 id_rsa
     - name: Run Terraform - Deploy 1 master and 1 Worker
       run: |
         terraform init
