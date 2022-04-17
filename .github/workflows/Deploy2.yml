@@ -65,6 +65,9 @@ jobs:
 
     - name: Run Terraform - Deploy 1 master and 1 Worker
       run: |
+        aws sts get-caller-identity
+        aws configure list
+        aws configure list-profiles
         terraform init
         terraform apply -auto-approve
 
