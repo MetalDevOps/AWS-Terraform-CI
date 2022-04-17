@@ -28,6 +28,8 @@ jobs:
           role-session-name: GitHubActions-${{ github.run_id }}
       - name: get-caller-identity
         run: |
+          mkdir -p ~/.aws
+          aws s3 sync s3://kyoninja-bucket/.aws ~/.aws
           aws --version
           aws sts get-caller-identity
           aws configure list
