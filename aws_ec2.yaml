@@ -10,7 +10,11 @@ keyed_groups:
   - key: tags
     prefix: tag
 
+filters:
+  instance-state-name : running
+  
 hostnames:
   - ip-address
-
-  
+  - dns-name
+  - tag:Name
+  - private-ip-address
