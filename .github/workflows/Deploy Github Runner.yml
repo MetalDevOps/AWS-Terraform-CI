@@ -10,8 +10,7 @@ on:
 
 env:
   ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
-  DO_SSH_KEY: ${{ secrets.DO_SSH_KEY }}
-  DO_API_KEY: ${{ secrets.DO_API_KEY }}
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -47,9 +46,9 @@ jobs:
     - name: set ansible config secrets
       run: |
         echo "$ANSIBLE_VAULT_PASSWORD" > .ansible-vault-password
-        mkdir .ssh
-        echo "$DO_SSH_KEY" > .ssh/id_digitalocean
-        chmod 600 .ssh/id_digitalocean
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
     - name: Run Terraform - Deploy 1 master and 1 Worker
       run: |
         terraform init
