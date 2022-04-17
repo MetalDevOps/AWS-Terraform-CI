@@ -59,6 +59,5 @@ jobs:
         terraform apply -auto-approve
     - name: Run Ansible - Add Runner
       run: |
-        ssh
         ansible-inventory -i aws_ec2.yaml --list
         ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" -e "action=add" setup-runner.yml -vvv
