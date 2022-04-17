@@ -47,4 +47,5 @@
 
 - name: Iniciando o serviço do runner
   shell: "cd {{ runner_path }} && sudo ./svc.sh start"
+  timeout: 30
 

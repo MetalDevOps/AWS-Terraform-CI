@@ -49,7 +49,9 @@ jobs:
         echo "$ANSIBLE_VAULT_PASSWORD" > .ansible-vault-password
         mkdir -p ~/.ssh
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
         echo $SSH_CONFIG > ~/.ssh/config
+        chmod 600 ~/.ssh/config
     - name: Run Terraform - Deploy 1 master and 1 Worker
       run: |
         terraform init
@@ -57,4 +59,4 @@ jobs:
     - name: Run Ansible - Add Runner
       run: |
         ansible-inventory -i aws_ec2.yaml --list
-        ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" -u ubuntu -e "action=add" setup-runner.yml
+        ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" -u ubuntu -e "action=add" setup-runner.yml -vvv
