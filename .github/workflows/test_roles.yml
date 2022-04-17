@@ -1,0 +1,41 @@
+name: Test roles
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Enter 'force' if you want to force a refresh"
+        required: false
+        default: ""
+
+env: 
+  AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+     # 1st
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          aws-region: us-east-1
+          # role-to-assume: arn:aws:iam::123456789012:role/myrole_A
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-session-name: GitHubActions-${{ github.run_id }}
+      - name: get-caller-identity
+        run: |
+          aws --version
+          aws sts get-caller-identity
+          aws configure list
+          aws configure list-profiles
+      # 2nd
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@master
+      #   with:
+      #     aws-region: us-east-1
+      #     role-to-assume: arn:aws:iam::123456789012:role/myrole_B
+      #     role-session-name: GitHubActions-${{ github.run_id }}
+      # - name: get-caller-identity shows myrole_B as expected
+      #   run: aws sts get-caller-identity
