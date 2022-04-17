@@ -21,8 +21,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@master
         with:
           aws-region: us-east-1
-          # role-to-assume: arn:aws:iam::123456789012:role/myrole_A
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-to-assume: arn:aws:iam::040143777901:role/github-actions
+          # role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           role-session-name: GitHubActions-${{ github.run_id }}
       - name: get-caller-identity
         run: |
