@@ -30,7 +30,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: "Configure AWS Credentials" Action For GitHub Actions
+    - name: Configure AWS Credentials Action For GitHub Actions
       uses: aws-actions/configure-aws-credentials@v1
       with:
         role-to-assume: ${{ secrets.RoleArn }}
