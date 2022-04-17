@@ -1,0 +1,77 @@
+name: Github Runner Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Enter 'force' if you want to force a refresh"
+        required: false
+        default: ""
+
+env:
+  ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
+  AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  ROLE_ARN: ${{ secrets.RoleArn }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+
+    defaults:
+        run:
+          shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1.4.0
+      with:
+        terraform_wrapper: false # This is recommended so the `terraform show` command outputs valid JSON
+
+    - name: "Configure AWS Credentials" Action For GitHub Actions
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ secrets.RoleArn }}
+        aws-region: us-east-1
+
+    - name: Install Python & Ansible
+      run: |
+        cat ~/.aws/credentials
+        python -m pip install --upgrade pip
+        pip install boto3
+        pip install ansible
+    - name: set ansible config secrets
+      run: |
+        echo "$ANSIBLE_VAULT_PASSWORD" > .ansible-vault-password
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        echo "$SSH_PRIVATE_KEY" > id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        echo $SSH_CONFIG > ~/.ssh/config
+        chmod 600 ~/.ssh/config
+        chmod 600 id_rsa
+    - name: Run Terraform - Deploy 1 master and 1 Worker
+      run: |
+        terraform init
+        terraform apply -auto-approve
+    - name: Run Ansible - Add Runner
+      run: |
+        ansible-inventory -i aws_ec2.yaml --list
+        ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" -e "action=add" setup-runner.yml -vvv
