@@ -8,9 +8,6 @@ on:
         required: false
         default: ""
 
-env:
-  AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,6 +25,7 @@ jobs:
           role-session-name: GitHubActions-${{ github.run_id }}
       - name: get-caller-identity
         run: |
+          echo ${{ secrets.HELLO_WORLD }}
           mkdir -p ~/.aws
           aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }}
