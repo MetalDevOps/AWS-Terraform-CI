@@ -48,7 +48,6 @@ jobs:
 
     - name: Install Python & Ansible
       run: |
-        cat ~/.aws/credentials
         python -m pip install --upgrade pip
         pip install boto3
         pip install ansible
