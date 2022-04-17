@@ -1,0 +1,9 @@
+---
+personal_access_token: "{{ lookup('env', 'PERSONAL_ACCESS_TOKEN') }}"
+github_user: "whoamikyo"
+repo_name: "AWS-Terraform-CI"
+user: "ubuntu"
+group: "ubuntu"
+runner_path: "/home/{{ user }}/actions-runner"
+download_url: "https://github.com/actions/runner/releases/download/v2.289.2/actions-runner-linux-x64-2.289.2.tar.gz"
+runner_dest: "actions-runner-linux-x64-2.289.2.tar.gz"

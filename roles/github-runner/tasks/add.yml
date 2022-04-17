@@ -1,0 +1,50 @@
+---
+- name: Criando o diretorio do runnner...
+  file:
+    path: "{{ runner_path }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ user }}"
+    group: "{{ group }}"
+    recurse: yes
+
+- name: Baixando os binarios do runner...
+  get_url:
+    url: "{{ download_url }}"
+    dest: "{{ runner_path }}/{{ runner_dest }}"
+    force: no
+  run_once: yes
+  become: false
+
+- name: Extraindo o tar.gz...
+  shell: "tar xvfz {{ runner_dest }}"
+  args:
+    chdir: "{{ runner_path }}"
+    warn: false
+
+- name: Consultando a API do Github para atualizar o token
+  uri:
+    url: "https://api.github.com/repos/{{ github_user }}/{{ repo_name }}/actions/runners/registration-token"
+    headers:
+      Authorization: "token {{ personal_access_token }}"
+      Accept: "application/vnd.github.v3+json"
+    method: POST
+    status_code: 201
+    force_basic_auth: yes
+  register: registration
+  run_once: yes
+
+- name: Regitrando o runner
+  command: "{{ runner_path }}/./config.sh --url https://github.com/{{ github_user }}/{{ repo_name }} \
+            --token {{ registration.json.token }} --name {{ ansible_hostname }} --unattended"
+  args:
+    chdir: "{{ runner_path }}"
+  become: yes
+  become_user: "{{ user }}"
+
+- name: Instalando o serviço do runner
+  shell: "cd {{ runner_path }} && sudo ./svc.sh install"
+
+- name: Iniciando o serviço do runner
+  shell: "cd {{ runner_path }} && sudo ./svc.sh start"
+

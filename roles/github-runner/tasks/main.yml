@@ -1,0 +1,8 @@
+--- #principal yaml para executar as tarefas
+- name: Adciona Runner
+  import_tasks: add.yml
+  when: action == "add"
+
+- name: Remove Runner
+  import_tasks: remove.yml
+  when: action == "remove"

@@ -1,0 +1,6 @@
+- name: Setup Github Runner
+  hosts: tag_type_worker
+  vars_files:
+    - roles/github-runner/tasks/vars.yml
+  roles:
+    - github-runner

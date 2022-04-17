@@ -1,0 +1,29 @@
+---
+
+- name: Consultando a API do Github para atualizar o token
+  uri:
+    url: "https://api.github.com/repos/{{ github_user }}/{{ repo_name }}/actions/runners/registration-token"
+    method: POST
+    headers:
+        Authorization: "token {{ personal_access_token }}"
+    status_code: 201
+  register: remove_token
+
+- name: Parando o serviço do runner
+  become: yes
+  become_method: sudo
+  shell: "cd {{ runner_path }} && ./svc.sh stop"
+
+- name: Desinstalando o serviço do runner
+  become: yes
+  become_method: sudo
+  shell: "cd {{ runner_path }} && ./svc.sh uninstall"
+
+- name: Removendo o runner
+  shell: "{{ runner_path }}/./config.sh remove --token {{remove_token.json.token}}"
+
+- name: Deletando a pasta do runner
+  become: yes
+  file:
+    path: "{{ runner_path }}"
+    state: absent   
