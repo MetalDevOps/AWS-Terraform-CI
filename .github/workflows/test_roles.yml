@@ -8,7 +8,7 @@ on:
         required: false
         default: ""
 
-env: 
+env:
   AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
 
 jobs:
