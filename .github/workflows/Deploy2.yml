@@ -30,6 +30,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    - name: "Configure AWS Credentials" Action For GitHub Actions
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ secrets.RoleArn }}
+        aws-region: us-east-1
+
     - name: Set up Python 3.9
       uses: actions/setup-python@v3
       with:
@@ -40,18 +46,13 @@ jobs:
       with:
         terraform_wrapper: false # This is recommended so the `terraform show` command outputs valid JSON
 
-    - name: "Configure AWS Credentials" Action For GitHub Actions
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        role-to-assume: ${{ secrets.RoleArn }}
-        aws-region: us-east-1
-
     - name: Install Python & Ansible
       run: |
         cat ~/.aws/credentials
         python -m pip install --upgrade pip
         pip install boto3
         pip install ansible
+
     - name: set ansible config secrets
       run: |
         echo "$ANSIBLE_VAULT_PASSWORD" > .ansible-vault-password
@@ -62,10 +63,12 @@ jobs:
         echo $SSH_CONFIG > ~/.ssh/config
         chmod 600 ~/.ssh/config
         chmod 600 id_rsa
+
     - name: Run Terraform - Deploy 1 master and 1 Worker
       run: |
         terraform init
         terraform apply -auto-approve
+
     - name: Run Ansible - Add Runner
       run: |
         ansible-inventory -i aws_ec2.yaml --list
