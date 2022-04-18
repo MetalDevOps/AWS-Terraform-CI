@@ -36,6 +36,7 @@ jobs:
       - name: Copy from S3
         run: |
           aws s3 sync s3://kyoninja-bucket/terraform.tfstate .
+          aws s3 sync Dockerfile s3://kyoninja-bucket
           ls -la
       # 2nd
       # - name: Configure AWS Credentials
