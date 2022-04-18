@@ -25,7 +25,6 @@ jobs:
           role-session-name: GitHubActions-${{ github.run_id }}
       - name: get-caller-identity
         run: |
-          echo ${{ secrets.HELLO_WORLD }}
           mkdir -p ~/.aws
           aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }}
@@ -34,6 +33,8 @@ jobs:
           aws sts get-caller-identity
           aws configure list
           aws configure list-profiles
+      - name: Copy from S3
+        run: |
           aws s3 sync s3://kyoninja-bucket/terraform.tfstate .
           ls -la
       # 2nd
