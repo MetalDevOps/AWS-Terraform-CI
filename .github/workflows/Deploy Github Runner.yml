@@ -61,12 +61,22 @@ jobs:
         pip install boto3
         pip install ansible
 
+    - name: Setup aws profile
+      run: |
+        mkdir -p ~/.aws
+        aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws configure set default.region us-east-1
+
     - name: Run Terraform - Deploy 1 master and 1 Worker
       run: |
         terraform init
         terraform apply -target=module.deploy-dev --auto-approve
 
-    - name: Run Ansible - Add Runner
+    - name: Add inventory to KNOWN_HOSTS
       run: |
         ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" setup_ssh_keys.yml
+  
+    - name: Run Ansible - Add Runner
+      run: |
         ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" -e "action=add" setup-runner.yml
