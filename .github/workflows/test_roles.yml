@@ -35,11 +35,8 @@ jobs:
           aws configure list-profiles
       - name: Copy from S3
         run: |
-          echo ${{ github.action_path }}
-          ls -la
-          aws s3 cp s3://kyoninja-bucket/terraform.tfstate ~/.aws --progress
-          ls -la ~/.aws
-          aws s3 cp main.tf s3://kyoninja-bucket/
+          aws s3 sync . s3://kyoninja-bucket
+          aws s3 cp main.tf s3://kyoninja-bucket
           ls -la
       # 2nd
       # - name: Configure AWS Credentials
