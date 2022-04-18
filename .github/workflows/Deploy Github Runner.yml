@@ -30,14 +30,14 @@ jobs:
       uses: actions/checkout@master
 
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@master
+      uses: aws-actions/configure-aws-credentials@main
       with:
         aws-region: us-east-1
         role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
         role-session-name: GitHubActions-${{ github.run_id }}
 
     - name: Install SSH key
-      uses: shimataro/ssh-key-action@master
+      uses: shimataro/ssh-key-action@v2.3.1
       with:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         name: id_rsa # optional
@@ -45,12 +45,12 @@ jobs:
         if_key_exists: replace # replace / ignore / fail; optional (defaults to fail)
 
     - name: Set up Python 3.9
-      uses: actions/setup-python@master
+      uses: actions/setup-python@v3.1.2
       with:
         python-version: 3.9
 
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@master
+      uses: hashicorp/setup-terraform@main
       with:
         terraform_wrapper: false # This is recommended so the `terraform show` command outputs valid JSON
 
