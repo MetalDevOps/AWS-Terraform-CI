@@ -40,6 +40,7 @@ jobs:
       uses: shimataro/ssh-key-action@v2.3.1
       with:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
+        known_hosts: ${{ secrets.KNOWN_HOSTS }}
         name: id_rsa # optional
         config: ${{ secrets.SSH_CONFIG }} # ssh_config; optional
         if_key_exists: replace # replace / ignore / fail; optional (defaults to fail)
