@@ -1,7 +1,7 @@
 ---
 personal_access_token: "{{ lookup('env', 'PERSONAL_ACCESS_TOKEN') }}"
 github_user: "whoamikyo"
-repo_name: "AWS-Terraform-CI"
+repo_name: "Flask-to-AWS-CodeDeploy"
 user: "ubuntu"
 group: "ubuntu"
 runner_path: "/home/{{ user }}/actions-runner"
