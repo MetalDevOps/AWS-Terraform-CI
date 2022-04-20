@@ -72,11 +72,11 @@ jobs:
       run: |
         ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" ssh_setup.yml
   
-    - name: Run Ansible - Add Runner
+    - name: Removing runner from worker
       run: |
         ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" -e "action=remove" setup-runner.yml
 
-    - name: Run Terraform - Deploy 1 master and 1 Worker
+    - name: Running terraform, destroying entire infra
       run: |
         terraform init
         terraform destroy -target=module.deploy-dev --auto-approve
