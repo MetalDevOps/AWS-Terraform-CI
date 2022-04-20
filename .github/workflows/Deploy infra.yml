@@ -1,4 +1,4 @@
-name: Github Runner Deploy
+name: Deploy infra / Github Runner
 
 on:
   workflow_dispatch:
