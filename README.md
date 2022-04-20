@@ -26,11 +26,11 @@ terraform apply --auto-approve
 #### Com esse comando será feito o deploy de um github runner em todas as maquinas criadas com o terraform que possuem a tag "worker"
 
 ```
-ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" -u ubuntu -e "action=add" setup-runner.yml
+ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" -e "action=add" setup-runner.yml
 ```
 
 #### Para remover o runner é só rodar esse comando
 
 ```
-ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" -u ubuntu -e "action=remove" setup-runner.yml
+ansible-playbook -i aws_ec2.yaml --limit "tag_name_ninja" -e "action=remove" setup-runner.yml
 ```
