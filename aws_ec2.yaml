@@ -9,12 +9,13 @@ regions:
 keyed_groups:
   - key: tags
     prefix: tag
+  - key: tags.Name
 
 filters:
   instance-state-name : running
   
 hostnames:
   - ip-address
-  - dns-name
-  - tag:Name
-  - private-ip-address
+  # - dns-name
+  # - tag:Name
+  # - private-ip-address

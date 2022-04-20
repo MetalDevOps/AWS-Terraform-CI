@@ -1,5 +1,5 @@
 ---
-operator_user: ubuntu
+operator_user: ninja
 operator_group: "{{ operator_user }}"
 # known_hosts
 known_hosts_group_name: all

@@ -41,7 +41,6 @@ resource "aws_security_group" "ninja-sg" {
 
 }
 
-
 resource "aws_instance" "ninja-worker" {
   ami           = "ami-0e472ba40eb589f49"
   instance_type = "t2.micro"
@@ -52,6 +51,13 @@ resource "aws_instance" "ninja-worker" {
     type = "worker"
   }
   security_groups = ["${aws_security_group.ninja-sg.name}"]
+
+  user_data = data.template_file.ubuntu_init.rendered
+}
+
+data "template_file" "ubuntu_init" {
+  template = file("${path.module}/ubuntu-init.sh")
+
 }
 
 resource "aws_instance" "ninja-master" {
@@ -68,12 +74,12 @@ resource "aws_instance" "ninja-master" {
 
   security_groups = ["${aws_security_group.ninja-sg.name}"]
 
-  user_data = data.template_file.user_data.rendered
+  user_data = data.template_file.centos_init.rendered
 
 }
 
-data "template_file" "user_data" {
-  template = file("${path.module}/user-data.sh")
+data "template_file" "centos_init" {
+  template = file("${path.module}/centos-init.sh")
 
 }
 
