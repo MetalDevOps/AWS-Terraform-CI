@@ -11,12 +11,10 @@
 
 - name: Parando o serviço do runner
   become: yes
-  become_method: sudo
   shell: "cd {{ runner_path }} && ./svc.sh stop"
 
 - name: Desinstalando o serviço do runner
   become: yes
-  become_method: sudo
   shell: "cd {{ runner_path }} && ./svc.sh uninstall"
 
 - name: Removendo o runner
