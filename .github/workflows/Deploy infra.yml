@@ -72,6 +72,7 @@ jobs:
       run: |
         terraform init
         terraform apply -target=module.deploy-dev --auto-approve
+        python ./timeout.py
 
     - name: Add inventory to KNOWN_HOSTS
       run: |
