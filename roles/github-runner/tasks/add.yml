@@ -20,7 +20,7 @@
   shell: "tar xvfz {{ runner_dest }}"
   args:
     chdir: "{{ runner_path }}"
-    warn: false
+    # warn: false
 
 - name: Consultando a API do Github para atualizar o token
   uri:
